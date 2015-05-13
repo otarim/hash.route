@@ -1,6 +1,8 @@
 (function(global,factory){
-	if(typeof define === 'function' && define.cmd){
+	if(typeof define === 'function' && define.cmd || define.amd){
 		return define(factory)
+	}else if(typeof module !== 'undefined' && module.exports){
+		module.exports = factory()
 	}else{
 		global.R = factory()
 	}
