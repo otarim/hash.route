@@ -1,6 +1,8 @@
 (function(global,factory){
-	if(typeof define === 'function' && define.cmd){
+	if(typeof define === 'function' && define.cmd || define.amd){
 		return define(factory)
+	}else if(typeof module !== 'undefined' && module.exports){
+		module.exports = factory()
 	}else{
 		global.R = factory()
 	}
@@ -45,8 +47,11 @@
 
 	R.prototype = {
 		constructor: R,
-		when: function(condition,cb){
+		when: function(condition,cb,extra){
 			R.queue.push(this.addRoute.bind(this,condition,cb))
+			if(extra){
+				R.stage[this.hostname + condition] = extra
+			}
 			return this
 		},
 		getPathname: function(){
@@ -62,12 +67,14 @@
 				if(isReg(condition)){
 					var match = condition.exec(pathname)
 					if(match){
+						this.prefix(condition)
 						cb.apply(this,[{
 							query: getQuery(location.hash)
 						}].concat(match.slice(1)))
 					}
 				}else{
 					if(condition === pathname){
+						this.prefix(condition)
 						cb.call(this,{
 							query: getQuery(location.hash)
 						})
@@ -76,9 +83,16 @@
 			}
 			R.currentHash = location.hash
 			return this
+		},
+		prefix: function(condition){
+			if(R.curStage){
+				R.stage[R.curStage] && R.stage[R.curStage].destroy()
+			}
+			R.curStage = this.hostname + condition
 		}
 	}
 	// static
+	R.stage = {}
 	R.bindStatus = false
 	R.currentHash = location.hash
 	R.queue = []
