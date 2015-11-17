@@ -1,5 +1,5 @@
 (function(global,factory){
-	if(typeof define === 'function' && define.cmd || define.amd){
+	if(typeof define === 'function' && (define.cmd || define.amd)){
 		return define(factory)
 	}else if(typeof module !== 'undefined' && module.exports){
 		module.exports = factory()
@@ -35,10 +35,11 @@
 	}
 	var R = function(conf){
 		var self = this
+		conf = conf || {}
 		if(!(self instanceof R)){
 			self = Object.create(R.prototype)
 		}
-		self.separator = conf.separator ||  '!'
+		self.separator = typeof conf.separator !== 'undefined' ? conf.separator : '!'
 		self.base = conf.base || '/'
 		self.hostname = '#' + self.separator + self.base
 		self.urlFrom = self.hostname.length
