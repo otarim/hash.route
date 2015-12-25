@@ -20,7 +20,9 @@
 		req: callback 的第一个参数，保存请求数据
 			req.query 请求参数
 			
-**R.run()**
+**R.run(instance)**
+
+	instance 路由实例
 
 运行路由，注意如果在 run 之后添加路由表，需要手动触发 run 函数
 

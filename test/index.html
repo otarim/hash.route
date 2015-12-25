@@ -3,38 +3,44 @@
 <head>
 	<meta charset="UTF-8">
 	<title>hash.route</title>
+	<style>
+		.reward,.list {
+			display: none;
+		}
+	</style>
 </head>
 <body>
-	
+	<p class="reward">reward</p>
+	<p>home</p>
+	<p class="list">list</p>
 </body>
 <script src="http://cdn.staticfile.org/seajs/2.3.0/sea-debug.js"></script>
 <script>
+	var $ = function(q){
+		return document.querySelector(q)
+	}
 	seajs.config({
 		base: '../dist/'
 	})
 	seajs.use('index',function(R){
-		var r = R({
-			base: '/user/'
-		})
-		var r2 = R({
-			base: '/page/'
-		})
-		r.when(/(\w+)\/vpn/,function(req,id){
-			console.log(req)
-			console.log(id)
-		}).when('otarim',function(req){
-			alert('xxxxx')
-			console.log(req)
-		})
-		r2.when(/(\d+)\/?$/,function(req,id){
-			console.log(req)
-			console.log(id,this.base)
-		})
-		R.run()
-		r2.when('about',function(req,id){
-			alert('works')
-		})
-		R.run()
+		var r = new R({
+	    separator: ''
+	  })
+	  r.when('reward',function(){
+	    $('.reward').style.display = 'block'
+	  },{
+	  	destroy: function(){
+	  		$('.reward').style.display = 'none'
+	  	}
+	  })
+	   r.when('list',function(){
+	    $('.list').style.display = 'block'
+	  },{
+	  	destroy: function(){
+	  		$('.list').style.display = 'none'
+	  	}
+	  })
+	  R.run(r)
 	})
 </script>
 </html>
